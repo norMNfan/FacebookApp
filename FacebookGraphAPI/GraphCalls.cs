@@ -64,6 +64,15 @@ namespace FacebookGraphAPI
             }
             return posts;
         }
+        public static Post getPost(FacebookClient client, Page page, int postIndex)
+        {
+            var GraphCall = string.Format("{0}/feed?limit=100", page.id);
+            var result = client.Get(GraphCall);
+            JObject postListJson = JObject.Parse(result.ToString());
+            var postJToken = postListJson["data"][postIndex];
+            Post post = new Post(postJToken);
+            return post;
+        }
         public static List<Comment>[] AllComments(Page page, List<Post> posts)
         {
             FacebookClient client = new FacebookClient(page.access_token);
@@ -101,6 +110,28 @@ namespace FacebookGraphAPI
             }
             return allComments;
         }
+        public static List<Comment> getComments(FacebookClient client, Post post)
+        {
+            string GraphCall = string.Format("{0}/comments?limit=1500", post.id);
+            var result = client.Get(GraphCall);
+            JObject commentListJson = JObject.Parse(result.ToString());
+            List<Comment> comments = new List<Comment>();
+            foreach(var comment in commentListJson["data"])
+            {
+                Comment x = new Comment(comment);
+                comments.Add(x);
+                GraphCall = string.Format("{0}/comments", x.id);
+                var replies = client.Get(GraphCall);
+                var repliesListJson = JObject.Parse(replies.ToString());
+                foreach(var reply in repliesListJson["data"])
+                {
+                    if (reply == null) break;
+                    Comment y = new Comment(reply);
+                    comments.Add(y);
+                }
+            }
+            return comments;
+        }
         public static void PostPage(Page page, string message)
         {
             FacebookClient client = new FacebookClient(page.access_token);
@@ -124,25 +155,18 @@ namespace FacebookGraphAPI
                 // handle something
             }
         }
-        public static void sendMessages(List<Comment>[] commentArray, Page page, string message)
+        public static void sendMessages(FacebookClient client, List<Comment> comments,string message)
         {
-            FacebookClient client = new FacebookClient(page.access_token);
-
-            // create message object
+            string GraphCall;
+            string messageCall;
             dynamic messageObject = new ExpandoObject();
             messageObject.message = string.Empty;
-            
-            string GraphCall;
-            var numberOfCommentThreads = commentArray.Length;
-            for(int i = 0; i < numberOfCommentThreads; i++)
+
+            foreach (var comment in comments)
             {
-                if (commentArray[i].Count < 1) continue;
-                foreach(var comment in commentArray[i])
-                {
-                    messageObject.message = message +  comment.from_name;
-                    GraphCall = string.Format("{0}/private_replies", comment.id);
-                    client.Post(GraphCall, messageObject);
-                }
+                messageCall = "Congradulations " + comment.from_name + message;
+                GraphCall = string.Format("{0}/private_replies", comment.id, messageCall);
+                //client.Post(GraphCall, messageObject);
             }
         }
     }

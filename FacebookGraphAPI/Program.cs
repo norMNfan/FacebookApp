@@ -17,40 +17,61 @@ namespace FacebookGraphAPI
         {
             // Tyler's login credentials
             // vyler.togt@gmail.com
-            // Muchroomcowmoon1
+            // Mushroomcowmoon1
+            /**************************************************************************
+             * STEP 1
+             * SET accounIndex
+             * 0 => Cartoon And Anime Lovers
+             * 1 => DC & Marvel Lovers
+             * 2 => Movie Lovers
+             * 3 => Disney Movie Lovers
+             * 4 => Beanstalk Market
+             * 5 => Fans of the Future
+             * 
+             * STEP 2
+             * RUN AllPosts to see which post you want to use
+             * SET postIndex
+             * 
+             * STEP 3
+             * SET message to you're custom message.
+             * check GraphCalls.sendMessages for how message is created with user name
+             * 
+             * STEP 4
+             * Run program!
+             *
+             ****************************************************************************/
 
-            string message = "Hey, I'm sending this programatically, ";
+            string message = "! You won our Pokemon Keychain Giveaway! Thank you for engaging in our community. Our friends over at Movie Treasures are sponsoring this event and want to give you 3 FREE keychains of your choice! \n\n" +
+                "How to Claim Your Prize: \n\n" +
+                "1. Follow Our Link >\n" +
+                "https://movietreasures.org/collections/anime-lovers/products/premium-quality-pokemon-keychains \n\n" +
+                "2. Add Any 3 Keychains to Your Cart \n\n" +
+                "3. Enter Coupon Code 'WINNER5' at Checkout \n\n" +
+                "4. Hurry! We Can Only Secure Your Exclusive Offer For 24 Hours! \n\n" +
+                "** Checkout the Movie Treasures FAQs page for answers to common questions \n\n" +
+                "https://movietreasures.org/pages/faqs-2 \n\n" +
+                "** Free shipping available in select regions only, all rates are discounted, but ultimately determined by location";
 
-            string TylerToken = "EAAGsVkZAMInsBACm7nZCoCEV0bko7EUbJcBX1KsSC5m8azC9UVEWuYdVR0WtZBqg3H6nUu2Sy9JSECZC0OGv6KNCHTdgDcZAkcbrrOKiJfhVjxkv2hRvZCibn3cKZC5O65QYc0XAFrpYReuoZApPSqqtUcKSE0Be5tdOHohSQBGFjQZDZD";
-            var TylerClient = new FacebookClient(TylerToken);
-            //string Token = "EAAG41WnBkZAEBAPm33aMwYTZBHCN0dU8mlUNdZAXmJqFkgOde2avg3QtAINASpjdfZCwQw40WIXnubG7ZBSgqs91SIgnleZCPzdZBwkZAeBWnhJZBKEMgDn7Q7Ss4o3cnPmmRnqTcpwehuRm301Pmw6yih3TTPQWtivgItaGbjGkgXAZDZD";            
-            //var client = new FacebookClient(Token);
+            int accountIndex = 0;
+            int postIndex = 13;
 
-            // GET all accounts
-            List<Account> accounts = GraphCalls.AllAccounts(TylerClient);
-            // Set
-            // 0 => Cartoon And Anime Lovers
-            // 1 => DC & Marvel Lovers
-            // 2 => Movie Lovers
-            // 3 => Disney Movie Lovers
-            // 4 => Beanstalk Market
-            // 5 => Fans of the Future
+            string Token = "EAAGsVkZAMInsBACm7nZCoCEV0bko7EUbJcBX1KsSC5m8azC9UVEWuYdVR0WtZBqg3H6nUu2Sy9JSECZC0OGv6KNCHTdgDcZAkcbrrOKiJfhVjxkv2hRvZCibn3cKZC5O65QYc0XAFrpYReuoZApPSqqtUcKSE0Be5tdOHohSQBGFjQZDZD";
 
-            // Set up page access token
-            Page page = GraphCalls.getPage(TylerClient, 0);
-            var pageClient = new FacebookClient(page.access_token);
-
-            // GET all of the posts on page feed
+            var client = new FacebookClient(Token);
+            Page page = GraphCalls.getPage(client, accountIndex);
             List<Post> posts = GraphCalls.AllPosts(page);
 
-            // GET all of the posts comments
-            List<Comment>[] comments = GraphCalls.AllComments(page, posts);
+            SendMessages(Token, accountIndex, postIndex, message);
+        }
 
-            // POST message to all the comments
-            // GraphCalls.sendMessages(comments, page, message);
-
-            // POST something to Page wall
-            //GraphCalls.PostPage(page, "THIS IS A TEST POST");
+        public static void SendMessages(string Token, int accountIndex, int postIndex, string message)
+        {
+            var client = new FacebookClient(Token);
+            Page page = GraphCalls.getPage(client, accountIndex);
+            var pageClient = new FacebookClient(page.access_token);
+            Post post = GraphCalls.getPost(pageClient, page, postIndex);
+            List<Comment> comments = GraphCalls.getComments(pageClient, post);
+            GraphCalls.sendMessages(pageClient, comments, message);
         }
 
         public static string GetAccessToken()
