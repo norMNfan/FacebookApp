@@ -52,26 +52,28 @@ namespace FacebookGraphAPI
                 "https://movietreasures.org/pages/faqs-2 \n\n" +
                 "** Free shipping available in select regions only, all rates are discounted, but ultimately determined by location";
 
-            int accountIndex = 0;
-            int postIndex = 13;
+            int accountIndex = 2;
+            int postIndex = 23;
+            int messageIndex = 0;
 
             string Token = "EAAGsVkZAMInsBACm7nZCoCEV0bko7EUbJcBX1KsSC5m8azC9UVEWuYdVR0WtZBqg3H6nUu2Sy9JSECZC0OGv6KNCHTdgDcZAkcbrrOKiJfhVjxkv2hRvZCibn3cKZC5O65QYc0XAFrpYReuoZApPSqqtUcKSE0Be5tdOHohSQBGFjQZDZD";
 
             var client = new FacebookClient(Token);
             Page page = GraphCalls.getPage(client, accountIndex);
+            GraphCalls.AllAccounts(client);
             List<Post> posts = GraphCalls.AllPosts(page);
 
-            SendMessages(Token, accountIndex, postIndex, message);
+            SendMessages(Token, accountIndex, postIndex, message, messageIndex);
         }
 
-        public static void SendMessages(string Token, int accountIndex, int postIndex, string message)
+        public static void SendMessages(string Token, int accountIndex, int postIndex, string message, int messageIndex)
         {
             var client = new FacebookClient(Token);
             Page page = GraphCalls.getPage(client, accountIndex);
             var pageClient = new FacebookClient(page.access_token);
             Post post = GraphCalls.getPost(pageClient, page, postIndex);
             List<Comment> comments = GraphCalls.getComments(pageClient, post);
-            GraphCalls.sendMessages(pageClient, comments, message);
+            GraphCalls.sendMessages(pageClient, comments, message, messageIndex);
         }
 
         public static string GetAccessToken()

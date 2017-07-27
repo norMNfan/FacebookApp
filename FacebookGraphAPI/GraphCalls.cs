@@ -30,10 +30,13 @@ namespace FacebookGraphAPI
             var result = client.Get(GraphCall);
             JObject accountListJson = JObject.Parse(result.ToString());
             List<Account> accounts = new List<Account>();
+            int index = 0;
             foreach(var account in accountListJson["data"])
             {
                 Account x = new Account(account);
                 accounts.Add(x);
+                Console.WriteLine("Account # {0} : {1}", index, x.name);
+                index++;
             }
             return accounts;
         }
@@ -135,38 +138,62 @@ namespace FacebookGraphAPI
         public static void PostPage(Page page, string message)
         {
             FacebookClient client = new FacebookClient(page.access_token);
-
-            // create post objewct
             dynamic messagePost = new ExpandoObject();
             messagePost.access_token = page.access_token;
-            //messagePost.picture = "[A_PICTURE]";
-            //messagePost.link = "[SOME_LINK]";
-            messagePost.name = "reeee";
             messagePost.caption = "THIS IS A NEW POST";
             messagePost.message = message;
-            //messagePost.description = "[SOME_DESCRIPTION]";
 
-            try
-            {
-                var result = client.Post(page.id + "/feed", messagePost);
-            }
-            catch (FacebookOAuthException ex)
-            {
-                // handle something
-            }
+            try { var result = client.Post(page.id + "/feed", messagePost); }
+            catch (FacebookOAuthException ex) { /* handle something */ }
         }
-        public static void sendMessages(FacebookClient client, List<Comment> comments,string message)
+        public static void sendMessages(FacebookClient client, List<Comment> comments, string message, int messageIndex)
         {
             string GraphCall;
             string messageCall;
+            string[] name;
             dynamic messageObject = new ExpandoObject();
             messageObject.message = string.Empty;
 
+            int index = 0;
+            bool seen;
             foreach (var comment in comments)
             {
-                messageCall = "Congradulations " + comment.from_name + message;
-                GraphCall = string.Format("{0}/private_replies", comment.id, messageCall);
-                //client.Post(GraphCall, messageObject);
+                // Checks message index. skips comments until we reach messageIndex
+                if (messageIndex > index) continue;
+                // Cycle through comments already seen
+                seen = false;
+
+                try
+                {
+                    // GET private_reply_conversation
+                    GraphCall = string.Format("{0}?fields=private_reply_conversation", comment.id);
+                    var replies = client.Get(GraphCall);
+                    var repliesListJson = JObject.Parse(replies.ToString());
+
+                    int id = (int)repliesListJson["private_reply_conversation"]["id"];
+                    seen = true;
+                }
+                catch(Exception)
+                {
+                    // send the message!
+                }
+
+                if (!seen)
+                {
+                    name = comment.from_name.Split(' ');
+                    messageCall = "Congratulations " + name[0] + message;
+                    messageObject.message = messageCall;
+                    GraphCall = string.Format("{0}/private_replies", comment.id);
+                    try
+                    {
+                        client.Post(GraphCall, messageObject);
+                    }
+                    catch (Exception)
+                    {
+                        // message not sent
+                    }
+                }
+                index++;
             }
         }
     }
