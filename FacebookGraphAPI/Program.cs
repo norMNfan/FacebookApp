@@ -20,13 +20,8 @@ namespace FacebookGraphAPI
             // Mushroomcowmoon1
             /**************************************************************************
              * STEP 1
+             * RUN AllAccounts
              * SET accounIndex
-             * 0 => Cartoon And Anime Lovers
-             * 1 => DC & Marvel Lovers
-             * 2 => Movie Lovers
-             * 3 => Disney Movie Lovers
-             * 4 => Beanstalk Market
-             * 5 => Fans of the Future
              * 
              * STEP 2
              * RUN AllPosts to see which post you want to use
@@ -36,7 +31,11 @@ namespace FacebookGraphAPI
              * SET message to you're custom message.
              * check GraphCalls.sendMessages for how message is created with user name
              * 
-             * STEP 4
+             * STEP 4 (optional)
+             *  Run GetMessages and find the messageIndex you wish to start at
+             * SET messageIndex
+             * 
+             * STEP 5
              * Run program!
              *
              ****************************************************************************/
@@ -53,7 +52,7 @@ namespace FacebookGraphAPI
                 "** Free shipping available in select regions only, all rates are discounted, but ultimately determined by location";
 
             int accountIndex = 2;
-            int postIndex = 4;
+            int postIndex = 14;
             int messageIndex = 0;
 
             string Token = "EAAGsVkZAMInsBACm7nZCoCEV0bko7EUbJcBX1KsSC5m8azC9UVEWuYdVR0WtZBqg3H6nUu2Sy9JSECZC0OGv6KNCHTdgDcZAkcbrrOKiJfhVjxkv2hRvZCibn3cKZC5O65QYc0XAFrpYReuoZApPSqqtUcKSE0Be5tdOHohSQBGFjQZDZD";
@@ -65,7 +64,6 @@ namespace FacebookGraphAPI
 
             SendMessages(Token, accountIndex, postIndex, message, messageIndex);
         }
-
         public static void SendMessages(string Token, int accountIndex, int postIndex, string message, int messageIndex)
         {
             var client = new FacebookClient(Token);
@@ -75,8 +73,7 @@ namespace FacebookGraphAPI
             List<Comment> comments = GraphCalls.getComments(pageClient, post);
             GraphCalls.sendMessages(pageClient, comments, message, messageIndex);
         }
-
-        public static string GetAccessToken()
+        public static string BrianGetAccessToken()
         {
             var client = new FacebookClient();
             dynamic result = client.Get("oauth/access_token", new
@@ -88,7 +85,6 @@ namespace FacebookGraphAPI
             });
             return result.access_token;
         }
-
         public static string TylerGetAccessToken()
         {
             var client = new FacebookClient();
