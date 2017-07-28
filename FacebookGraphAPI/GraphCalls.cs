@@ -153,32 +153,21 @@ namespace FacebookGraphAPI
             string[] name;
             dynamic messageObject = new ExpandoObject();
             messageObject.message = string.Empty;
-
-            int index = 0;
-            bool seen;
-            foreach (var comment in comments)
+            
+            Dictionary<string, bool> idArray = new Dictionary<string, bool>();
+            for (int i = 0; i < comments.Count; i++)
             {
-                // Checks message index. skips comments until we reach messageIndex
-                if (messageIndex > index) continue;
-                // Cycle through comments already seen
-                seen = false;
-
                 try
                 {
-                    // GET private_reply_conversation
-                    GraphCall = string.Format("{0}?fields=private_reply_conversation", comment.id);
-                    var replies = client.Get(GraphCall);
-                    var repliesListJson = JObject.Parse(replies.ToString());
+                    idArray.Add(comments[i].from_id, false);
+                } catch(Exception) { /* from_id already added */ }
+            }
 
-                    int id = (int)repliesListJson["private_reply_conversation"]["id"];
-                    seen = true;
-                }
-                catch(Exception)
-                {
-                    // send the message!
-                }
-
-                if (!seen)
+            int index = 0;
+            foreach (var comment in comments)
+            {
+                if (messageIndex > index) { index++; continue; }
+                if (!idArray[comment.from_id])
                 {
                     name = comment.from_name.Split(' ');
                     messageCall = "Congratulations " + name[0] + message;
@@ -187,11 +176,8 @@ namespace FacebookGraphAPI
                     try
                     {
                         client.Post(GraphCall, messageObject);
-                    }
-                    catch (Exception)
-                    {
-                        // message not sent
-                    }
+                        idArray[comment.from_id] = true; // set from_id to true after message is sent
+                    } catch (Exception) { /* message not sent */ }
                 }
                 index++;
             }

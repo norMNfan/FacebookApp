@@ -53,7 +53,7 @@ namespace FacebookGraphAPI
                 "** Free shipping available in select regions only, all rates are discounted, but ultimately determined by location";
 
             int accountIndex = 2;
-            int postIndex = 23;
+            int postIndex = 4;
             int messageIndex = 0;
 
             string Token = "EAAGsVkZAMInsBACm7nZCoCEV0bko7EUbJcBX1KsSC5m8azC9UVEWuYdVR0WtZBqg3H6nUu2Sy9JSECZC0OGv6KNCHTdgDcZAkcbrrOKiJfhVjxkv2hRvZCibn3cKZC5O65QYc0XAFrpYReuoZApPSqqtUcKSE0Be5tdOHohSQBGFjQZDZD";
