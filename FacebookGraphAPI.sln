@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.15
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FacebookGraphAPI", "FacebookGraphAPI\FacebookGraphAPI.csproj", "{7C0DA1D0-8563-49C0-A048-FF4E5172CC7B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FacebookMessanger", "FacebookMessanger\FacebookMessanger.csproj", "{E269241F-2843-4887-B53F-A478B5329612}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7C0DA1D0-8563-49C0-A048-FF4E5172CC7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7C0DA1D0-8563-49C0-A048-FF4E5172CC7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7C0DA1D0-8563-49C0-A048-FF4E5172CC7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7C0DA1D0-8563-49C0-A048-FF4E5172CC7B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E269241F-2843-4887-B53F-A478B5329612}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E269241F-2843-4887-B53F-A478B5329612}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E269241F-2843-4887-B53F-A478B5329612}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E269241F-2843-4887-B53F-A478B5329612}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
