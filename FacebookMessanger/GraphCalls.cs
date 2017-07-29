@@ -169,6 +169,10 @@ namespace FacebookGraphAPI
                 if (messageIndex > index) { index++; continue; }
                 if (!idArray[comment.from_id])
                 {
+                    Random rand = new Random();
+                    int wait = rand.Next(5, 12) * 1000;
+                    System.Threading.Thread.Sleep(wait);
+
                     name = comment.from_name.Split(' ');
                     messageCall = "Congratulations " + name[0] + message;
                     messageObject.message = messageCall;
