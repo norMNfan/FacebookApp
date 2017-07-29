@@ -166,11 +166,20 @@ namespace FacebookGraphAPI
             int index = 0;
             foreach (var comment in comments)
             {
-                if (messageIndex > index) { index++; continue; }
+                if (messageIndex > index)
+                {
+                    index++;
+                    try
+                    {
+                        idArray[comment.from_id] = true; // set from_id to true after message is sent
+                    }
+                    catch (Exception) {  }
+                    continue;
+                }
                 if (!idArray[comment.from_id])
                 {
                     Random rand = new Random();
-                    int wait = rand.Next(5, 12) * 1000;
+                    int wait = rand.Next(10, 12) * 1000;
                     System.Threading.Thread.Sleep(wait);
 
                     name = comment.from_name.Split(' ');
