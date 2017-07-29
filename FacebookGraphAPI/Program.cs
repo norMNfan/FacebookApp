@@ -13,7 +13,7 @@ namespace FacebookGraphAPI
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main(string[] args) 
         {
             // Tyler's login credentials
             // vyler.togt@gmail.com
