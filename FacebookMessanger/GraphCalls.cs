@@ -144,7 +144,7 @@ namespace FacebookGraphAPI
             messagePost.message = message;
 
             try { var result = client.Post(page.id + "/feed", messagePost); }
-            catch (FacebookOAuthException ex) { /* handle something */ }
+            catch (FacebookOAuthException) { /* handle something */ }
         }
         public static void sendMessages(FacebookClient client, List<Comment> comments, string message, int messageIndex)
         {
@@ -179,7 +179,7 @@ namespace FacebookGraphAPI
                 if (!idArray[comment.from_id])
                 {
                     Random rand = new Random();
-                    int wait = rand.Next(10, 12) * 1000;
+                    int wait = rand.Next(10, 30) * 1000;
                     System.Threading.Thread.Sleep(wait);
 
                     name = comment.from_name.Split(' ');
