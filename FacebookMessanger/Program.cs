@@ -50,10 +50,12 @@ namespace FacebookGraphAPI
                 "** Checkout the Movie Treasures FAQs page for answers to common questions \n\n" +
                 "https://movietreasures.org/pages/faqs-2 \n\n" +
                 "** Free shipping available in select regions only, all rates are discounted, but ultimately determined by location";
+            message = "! Thank you for your support.";
 
             int accountIndex = 2;
-            int postIndex = 14;
-            int messageIndex = 0;
+            int postIndex = 23;
+            int messageStartIndex = 0; // default = 0
+            int messageEndIndex = int.MaxValue; // default = int.MaxValue
 
             string Token = "EAAGsVkZAMInsBACm7nZCoCEV0bko7EUbJcBX1KsSC5m8azC9UVEWuYdVR0WtZBqg3H6nUu2Sy9JSECZC0OGv6KNCHTdgDcZAkcbrrOKiJfhVjxkv2hRvZCibn3cKZC5O65QYc0XAFrpYReuoZApPSqqtUcKSE0Be5tdOHohSQBGFjQZDZD";
 
@@ -62,16 +64,16 @@ namespace FacebookGraphAPI
             GraphCalls.AllAccounts(client);
             List<Post> posts = GraphCalls.AllPosts(page);
 
-            SendMessages(Token, accountIndex, postIndex, message, messageIndex);
+            SendMessages(Token, accountIndex, postIndex, message, messageStartIndex, messageEndIndex);
         }
-        public static void SendMessages(string Token, int accountIndex, int postIndex, string message, int messageIndex)
+        public static void SendMessages(string Token, int accountIndex, int postIndex, string message, int messageStartIndex, int messageEndIndex)
         {
             var client = new FacebookClient(Token);
             Page page = GraphCalls.getPage(client, accountIndex);
             var pageClient = new FacebookClient(page.access_token);
             Post post = GraphCalls.getPost(pageClient, page, postIndex);
             List<Comment> comments = GraphCalls.getComments(pageClient, post);
-            GraphCalls.sendMessages(pageClient, comments, message, messageIndex);
+            GraphCalls.sendMessages(pageClient, comments, message, messageStartIndex, messageEndIndex);
         }
         public static string BrianGetAccessToken()
         {

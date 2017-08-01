@@ -146,7 +146,7 @@ namespace FacebookGraphAPI
             try { var result = client.Post(page.id + "/feed", messagePost); }
             catch (FacebookOAuthException) { /* handle something */ }
         }
-        public static void sendMessages(FacebookClient client, List<Comment> comments, string message, int messageIndex)
+        public static void sendMessages(FacebookClient client, List<Comment> comments, string message, int messageStartIndex, int messageEndIndex)
         {
             string GraphCall;
             string messageCall;
@@ -160,13 +160,13 @@ namespace FacebookGraphAPI
                 try
                 {
                     idArray.Add(comments[i].from_id, false);
-                } catch(Exception) { /* from_id already added */ }
+                }
+                catch (Exception) { /* from_id already added */ }
             }
-
             int index = 0;
             foreach (var comment in comments)
             {
-                if (messageIndex > index)
+                if (index < messageStartIndex|| index > messageEndIndex)
                 {
                     index++;
                     try
@@ -178,21 +178,21 @@ namespace FacebookGraphAPI
                 }
                 if (!idArray[comment.from_id])
                 {
-                    Random rand = new Random();
-                    int wait = rand.Next(10, 30) * 1000;
-                    System.Threading.Thread.Sleep(wait);
-
                     name = comment.from_name.Split(' ');
-                    messageCall = "Congratulations " + name[0] + message;
+                    messageCall = "Hey " + name[0] + message;
                     messageObject.message = messageCall;
                     GraphCall = string.Format("{0}/private_replies", comment.id);
                     try
                     {
                         client.Post(GraphCall, messageObject);
+                        Random rand = new Random();
+                        int wait = rand.Next(25, 45) * 1000;
+                        System.Threading.Thread.Sleep(wait);
                         idArray[comment.from_id] = true; // set from_id to true after message is sent
-                    } catch (Exception) { /* message not sent */ }
+                    }
+                    catch (Exception) { /* message not sent */ }
                 }
-                index++;
+                 index++;
             }
         }
     }
