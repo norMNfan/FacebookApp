@@ -16,8 +16,6 @@ namespace FacebookGraphAPI
         static void Main(string[] args) 
         {
             // Tyler's login credentials
-            // vyler.togt@gmail.com
-            // Mushroomcowmoon1 
             /**************************************************************************
              * STEP 1
              * RUN AllAccounts
