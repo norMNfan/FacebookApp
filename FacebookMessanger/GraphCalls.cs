@@ -15,7 +15,7 @@ namespace FacebookGraphAPI
     class GraphCalls
     {
         const string pageId = "1130035050388269";
-        const string pageAuth = "EAACEdEose0cBAN6Yh4zAN8skcmREqgNRAnUbt9L7ZByD0408ZCPd2ZAv9dzD73PMvzLN1M9nQ3sZCbfWXNIntuSfZAfKV6Wkzggwly4BdHyqo2SGzLbjuVaxgP6H0dLUKeiYCLt9PpzBCr8pVrjE07muPMXL9or6u0nE535a6lbrtS1zw6td0O4pya7LfXLqrzZB1W8tZB54gZDZD";
+        const string pageAuth = "";
         public static Page getPage(FacebookClient client, int index)
         {
             var result = client.Get("me/accounts");
